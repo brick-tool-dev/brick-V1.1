@@ -8,4 +8,4 @@ brick verifier v1.1
 
 
 ## Team Members
-Lei Bu, Yichao Li, Lecheng Lyn, Zhunyi Xie 
+Lei Bu, Yichao Li, Lecheng Lyu, Zhunyi Xie 

@@ -1,0 +1,39 @@
+#!/bin/bash
+# tool
+
+if [ $# -eq 0 -o $# -gt 2 ];
+then
+echo "Wrong options number: $#"
+echo "USAGE: brick --32 <filename>"
+echo "USAGE: brick --version"
+exit 1
+fi
+
+
+while [ -n "$1" ]
+do
+    case "$1" in
+        --32)
+            ;;
+        --version)
+	    echo "v1.1"
+            ;;
+        *)
+	    fileName=$1
+	    subFileName=${fileName##*/}
+	    ./bin/preprocessor/src/substitute $1 -o $subFileName --function-substitute	   
+	    ./bin/preprocessor/src/preprocess $subFileName -o brick_preprocess_temp.c --loop-abstraction 
+	    if [ ! -f "brick_preprocess_temp.c" ]; then
+            	bash -c "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}./lib bin/brick-binary --32 $subFileName"
+    	    else
+		mv brick_preprocess_temp.c $subFileName
+	    	bash -c "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}./lib bin/brick-binary --32 $subFileName"		
+    	    fi
+	    if [ -f $subFileName ]; then
+		rm $subFileName
+	    fi 
+	    exit 0
+            ;;
+    esac
+    shift
+done
